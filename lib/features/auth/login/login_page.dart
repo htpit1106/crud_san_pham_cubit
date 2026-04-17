@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_demo/core/constants/asset_constants.dart';
 import 'package:login_demo/core/extensions/num_extension.dart';
@@ -53,10 +52,8 @@ class _LoginPageChildState extends State<LoginPageChild> {
   void dispose() {
     _cubit.accountController.dispose();
     _cubit.passwordController.dispose();
-    _cubit.mstController.dispose();
     _cubit.accountFocusNode.dispose();
     _cubit.passwordFocusNode.dispose();
-    _cubit.mstFocusNode.dispose();
     _cubit.obscureTextController.dispose();
     super.dispose();
   }
@@ -106,31 +103,6 @@ class _LoginPageChildState extends State<LoginPageChild> {
         return Column(
           children: [
             AppSvgImage(AssetConstants.logoApp),
-            AppTextField(
-              focusNode: _cubit.mstFocusNode,
-              controller: _cubit.mstController,
-              labelText: "Mã số thuế",
-              hintText: "Mã số thuế",
-              validator: (value) => ValidatorUtils.validateMstOrCCCd(value),
-              keyboardType: TextInputType.numberWithOptions(
-                signed: true,
-                decimal: false,
-              ),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(
-                  ValidatorUtils.inputNumberRegex,
-                ),
-              ],
-              autovalidateMode: state.isSubmit
-                  ? AutovalidateMode.always
-                  : AutovalidateMode.disabled,
-
-              textInputAction: TextInputAction.next,
-              onSubmitted: (_) {
-                FocusScope.of(context).requestFocus(_cubit.accountFocusNode);
-              },
-            ),
-
             AppTextField(
               focusNode: _cubit.accountFocusNode,
               controller: _cubit.accountController,
@@ -189,9 +161,7 @@ class _LoginPageChildState extends State<LoginPageChild> {
               ),
             ),
             InkWell(
-              onTap: () {
-                _cubit.loginWithBiometrics();
-              },
+              onTap: () {},
               child: BlocBuilder<AppCubit, AppState>(
                 buildWhen: (previous, current) =>
                     previous.onBiometric != current.onBiometric,
@@ -211,16 +181,11 @@ class _LoginPageChildState extends State<LoginPageChild> {
 
   void _handleLoginPressed() {
     _unfocusTextField();
-    _cubit.isSubmitted();
-    if (_cubit.loginFormKey.currentState?.validate() == true) {
-      _cubit.onSubmit();
-    }
   }
 
   void _unfocusTextField() {
     _cubit.accountFocusNode.unfocus();
     _cubit.passwordFocusNode.unfocus();
-    _cubit.mstFocusNode.unfocus();
   }
 
   Widget _buildGroupButton() {
