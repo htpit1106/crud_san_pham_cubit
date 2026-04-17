@@ -151,7 +151,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<bool> checkOnBiometricLogin() async {
-    final accessToken = await SecureStorageHelper.instance.getAccessToken();
+    final accessToken = await SecureStorageHelper.instance.getSessionToken();
     if (accessToken != null &&
         accessToken["isBiometric"] == true &&
         accessToken["sessionToken"] != null) {

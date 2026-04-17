@@ -5,6 +5,7 @@ import 'package:login_demo/data/model/entities/account_entity.dart';
 class SecureStorageHelper {
   static const _accesSession = 'access_session';
   static const _userInfo = "user_info";
+  static const _accessToken = 'access_token';
   late final FlutterSecureStorage _storage;
 
   SecureStorageHelper._(this._storage);
@@ -34,7 +35,7 @@ class SecureStorageHelper {
   // clear
   Future<void> clearUserInfo() async {
     await _storage.delete(key: _userInfo);
-  }
+  } 
 
   Future<void> saveAccessToken({
     required String username,
@@ -52,7 +53,7 @@ class SecureStorageHelper {
 
   // update biometric
   Future<void> updateBiometric(bool isBiometric) async {
-    final session = await getAccessToken();
+    final session = await getSessionToken();
     if (session == null) return;
 
     final updated = {...session, "isBiometric": isBiometric};
@@ -60,7 +61,7 @@ class SecureStorageHelper {
     await _storage.write(key: _accesSession, value: jsonEncode(updated));
   }
 
-  Future<Map<String, dynamic>?> getAccessToken() async {
+  Future<Map<String, dynamic>?> getSessionToken() async {
     final value = await _storage.read(key: _accesSession);
     if (value != null) {
       return jsonDecode(value);
@@ -70,5 +71,13 @@ class SecureStorageHelper {
 
   Future<void> clearSession() async {
     await _storage.delete(key: _accesSession);
+  }
+
+  Future<String?> getToken() async {
+    final token = await _storage.read(key: _accessToken);
+    if (token != null) {
+      return token;
+    }
+    return null;
   }
 }

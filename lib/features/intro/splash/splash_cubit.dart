@@ -42,7 +42,7 @@ class SplashCubit extends Cubit<SplashState> {
 
   Future<bool> checkLogin() async {
     _showTime = DateTime.now();
-    final accessToken = await SecureStorageHelper.instance.getAccessToken();
+    final accessToken = await SecureStorageHelper.instance.getSessionToken();
     if (accessToken != null) {
       return accessToken["sessionToken"] != null;
     }
@@ -64,7 +64,7 @@ class SplashCubit extends Cubit<SplashState> {
   }
 
   Future<void> checkOnBiometricLogin() async {
-    final accessToken = await SecureStorageHelper.instance.getAccessToken();
+    final accessToken = await SecureStorageHelper.instance.getSessionToken();
     if (accessToken != null &&
         accessToken["isBiometric"] == true &&
         accessToken["sessionToken"] != null) {
