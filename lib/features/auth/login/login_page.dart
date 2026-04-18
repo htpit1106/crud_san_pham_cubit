@@ -179,8 +179,12 @@ class _LoginPageChildState extends State<LoginPageChild> {
     );
   }
 
-  void _handleLoginPressed() {
+  void _handleLoginPressed() async {
     _unfocusTextField();
+    if (_cubit.loginFormKey.currentState?.validate() != true) {
+      return;
+    }
+    await _cubit.onSubmit();
   }
 
   void _unfocusTextField() {

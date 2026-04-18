@@ -13,11 +13,17 @@ class ObjectResponse<T> {
     Map<String, dynamic> json,
     T Function(Object? json) fromJsonT,
   ) => ObjectResponse<T>(
-    message: json['message'] as List<dynamic>,
+    message: _parseMessage(json['message']),
     data: _$nullableGenericFromJson(json['data'], fromJsonT),
     items: _$nullableGenericFromJson(json['items'], fromJsonT),
     status: json['status'] as bool?,
   );
+}
+
+List<dynamic> _parseMessage(Object? value) {
+  if (value == null) return const [];
+  if (value is List) return value;
+  return [value];
 }
 
 T? _$nullableGenericFromJson<T>(

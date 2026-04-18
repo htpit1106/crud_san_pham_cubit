@@ -21,6 +21,7 @@ class HomePage extends StatelessWidget {
       create: (context) => HomeCubit(
         navigator: HomeNavigator(context: context),
         appCubit: context.read(),
+        authRepository: context.read(),
       ),
       child: HomePageChild(),
     );

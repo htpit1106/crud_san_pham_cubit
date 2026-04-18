@@ -35,9 +35,9 @@ class SecureStorageHelper {
   // clear
   Future<void> clearUserInfo() async {
     await _storage.delete(key: _userInfo);
-  } 
+  }
 
-  Future<void> saveAccessToken({
+  Future<void> saveSessionToken({
     required String username,
     required String sessionToken,
     bool isBiometric = false,
@@ -79,5 +79,13 @@ class SecureStorageHelper {
       return token;
     }
     return null;
+  }
+
+  Future<void> saveAccessToken(String? token) async {
+    await _storage.write(key: _accessToken, value: token);
+  }
+
+  Future<void> clearAccessToken() async {
+    await _storage.delete(key: _accessToken);
   }
 }
