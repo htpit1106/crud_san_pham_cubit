@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:go_router/go_router.dart';
+import 'package:login_demo/core/constants/key_constants.dart';
 import 'package:login_demo/data/database/secure_storage_helper.dart';
 import 'package:login_demo/navigator/app_router.dart';
 
@@ -19,22 +20,21 @@ class AuthInterceptors extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    final errorKey = err.response?.data?['error_key'];
+
     if (err.response?.statusCode == 401) {
-      _handleLogout();
+      if (errorKey == KeyConstants.errInvalidAccessToken) {
+        await _forceLogout();
+        return handler.reject(err);
+      }
     }
 
     handler.next(err);
   }
 
-  void _handleLogout() {
-    final context = AppRouter.navigationKey.currentContext;
-    if (context == null) return;
-
-    // context.read<AppCubit>().logout();
-    // chưa xoá token ở secure storage để tiện cho việc auto-login sau này, chỉ xoá khi user explicitly logout
-    AppRouter.navigationKey.currentState?.popUntil((route) => route.isFirst);
-
-    context.replaceNamed(AppRouter.loginRouteName);
+  Future<void> _forceLogout() async {
+    await SecureStorageHelper.instance.clearAccessToken();
+    AppRouter.markUnauthenticated();
   }
 }

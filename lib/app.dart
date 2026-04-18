@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_demo/core/configs/app_configs.dart';
+import 'package:login_demo/core/network/api_util.dart';
 import 'package:login_demo/data/repositories/auth_repository.dart';
 import 'package:login_demo/core/global/app_cubit.dart';
 import 'package:login_demo/core/utils/utils.dart';
@@ -17,11 +18,12 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    final apiClient = ApiUtil.apiClient;
     return MultiBlocProvider(
       providers: [
         BlocProvider<AppCubit>(create: (context) => AppCubit()),
         RepositoryProvider<AuthRepository>(
-          create: (context) => AuthRepositoryImpl(),
+          create: (context) => AuthRepositoryImpl(apiClient: apiClient),
         ),
       ],
       child: GestureDetector(
