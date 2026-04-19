@@ -7,6 +7,7 @@ class ProductEntity {
   final String? code;
   final double? price;
   final int? stock;
+  final int? categoryId;
   final String? description;
   final String? image;
   ProductEntity({
@@ -20,10 +21,10 @@ class ProductEntity {
     this.stock,
     this.description,
     this.image,
+    this.categoryId,
   });
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'status': status,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
@@ -33,6 +34,7 @@ class ProductEntity {
       'stock': stock,
       'description': description,
       'image': image,
+      'category_id': categoryId,
     };
   }
 
@@ -53,6 +55,7 @@ class ProductEntity {
       stock: json['stock'] as int?,
       description: json['description'] as String?,
       image: json['image'] as String?,
+      categoryId: json['category_id'] as int?,
     );
   }
 }

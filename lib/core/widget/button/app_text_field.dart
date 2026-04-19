@@ -158,12 +158,12 @@ class AppTextField extends StatelessWidget {
       suffixIcon:
           suffixIcon ??
           ValueListenableBuilder<TextEditingValue>(
-            valueListenable: controller!,
+            valueListenable: controller ?? TextEditingController(),
             builder: (context, value, _) {
               if (value.text.isEmpty) return const SizedBox();
               return IconButton(
                 onPressed: () {
-                  controller!.clear();
+                  controller?.clear();
                 },
                 icon: const AppSvgImage(AssetConstants.closeCircle, width: 22),
               );

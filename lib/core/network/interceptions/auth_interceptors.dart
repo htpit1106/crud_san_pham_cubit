@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:go_router/go_router.dart';
 import 'package:login_demo/core/constants/key_constants.dart';
 import 'package:login_demo/data/database/secure_storage_helper.dart';
 import 'package:login_demo/navigator/app_router.dart';

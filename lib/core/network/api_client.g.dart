@@ -71,7 +71,7 @@ class _ApiClient implements ApiClient {
     try {
       _value = ArrayResponse<CategoryEntity>.fromJson(
         _result.data!,
-        (json) => CategoryEntity.fromJson(json),
+        (json) => CategoryEntity.fromJson(json as Map<String, dynamic>),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
