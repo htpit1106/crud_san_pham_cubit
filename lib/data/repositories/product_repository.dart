@@ -39,7 +39,16 @@ class ProductRepositoryImpl extends ProductRepository {
   @override
   Future<Either<Failure, void>> createProduct(ProductEntity product) async {
     try {
-      await apiClient.createProduct(product);
+      final productData = {
+        'name': product.name,
+        'code': product.code,
+        'price': product.price,
+        'stock': product.stock,
+        'description': product.description,
+        'status': product.status,
+        'category_id': product.category?.id,
+      };
+      await apiClient.createProduct(productData);
       return Right(null);
     } catch (e) {
       return Left(mapExceptionToFailure(e));
@@ -115,7 +124,16 @@ class ProductRepositoryImpl extends ProductRepository {
     ProductEntity product,
   ) async {
     try {
-      await apiClient.updateProduct(id, product);
+      final productData = {
+        'name': product.name,
+        'code': product.code,
+        'price': product.price,
+        'stock': product.stock,
+        'description': product.description,
+        'status': product.status,
+        'category_id': product.category?.id,
+      };
+      await apiClient.updateProduct(id, productData);
       return Right(null);
     } catch (e) {
       return Left(mapExceptionToFailure(e));

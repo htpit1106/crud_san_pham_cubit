@@ -14,5 +14,5 @@ class AppState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [onBiometric];
+  List<Object?> get props => [onBiometric, categories];
 }

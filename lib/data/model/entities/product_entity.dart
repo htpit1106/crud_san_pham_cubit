@@ -1,3 +1,5 @@
+import 'package:login_demo/data/model/entities/category_entity.dart';
+
 class ProductEntity {
   final int? id;
   final int? status;
@@ -7,7 +9,7 @@ class ProductEntity {
   final String? code;
   final double? price;
   final int? stock;
-  final int? categoryId;
+  final CategoryEntity? category;
   final String? description;
   final String? image;
   ProductEntity({
@@ -21,8 +23,37 @@ class ProductEntity {
     this.stock,
     this.description,
     this.image,
-    this.categoryId,
+    this.category
   });
+  // copywith
+  ProductEntity copyWith({
+    int? id,
+    int? status,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? name,
+    String? code,
+    double? price,
+    int? stock,
+    String? description,
+    String? image,
+    CategoryEntity? category,
+  }) {
+    return ProductEntity(
+      id: id ?? this.id,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      name: name ?? this.name,
+      code: code ?? this.code,
+      price: price ?? this.price,
+      stock: stock ?? this.stock,
+      description: description ?? this.description,
+      image: image ?? this.image,
+      category: category ?? this.category,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'status': status,
@@ -34,7 +65,7 @@ class ProductEntity {
       'stock': stock,
       'description': description,
       'image': image,
-      'category_id': categoryId,
+      'category': category?.toJson(),
     };
   }
 
@@ -54,8 +85,7 @@ class ProductEntity {
       price: json["price"] != null ? (json['price'] as num).toDouble() : null,
       stock: json['stock'] as int?,
       description: json['description'] as String?,
-      image: json['image'] as String?,
-      categoryId: json['category_id'] as int?,
+      category: json['category'] != null ? CategoryEntity.fromJson(json['category']) : null,
     );
   }
 }

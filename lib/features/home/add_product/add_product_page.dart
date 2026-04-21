@@ -21,17 +21,15 @@ class AddProductPage extends StatelessWidget {
         producRepository: context.read(),
         navigator: AddProductNavigator(context: context),
       ),
-      child: AddProductFormSheet(
-        categories: context.read<AppCubit>().state.categories,
-      ),
+      child: AddProductFormSheet(product: productEntity),
     );
   }
 }
 
 class AddProductFormSheet extends StatefulWidget {
-  final List<CategoryEntity>? categories;
+  final ProductEntity? product;
 
-  const AddProductFormSheet({super.key, this.categories = const []});
+  const AddProductFormSheet({super.key, this.product});
 
   @override
   State<AddProductFormSheet> createState() => _AddProductFormSheetState();
@@ -44,6 +42,16 @@ class _AddProductFormSheetState extends State<AddProductFormSheet> {
   void initState() {
     super.initState();
     _cubit = context.read<AddProductCubit>();
+    if (widget.product != null) {
+      _cubit.changeProductInfo(widget.product);
+      _cubit.codeController.text = widget.product?.code ?? "";
+      _cubit.nameController.text = widget.product?.name ?? "";
+      _cubit.priceController.text = widget.product?.price.toString() ?? "";
+      _cubit.stockController.text = widget.product?.stock.toString() ?? "";
+      _cubit.descriptionController.text = widget.product?.description ?? "";
+      _cubit.onChangeCategory(widget.product?.category);
+      _cubit.onChangeStatus(widget.product?.status);
+    }
   }
 
   @override
@@ -136,13 +144,13 @@ class _AddProductFormSheetState extends State<AddProductFormSheet> {
                             state.categories,
                           );
 
-                          final selectedCategoryId = _resolveCategoryValue(
-                            currentValue: _cubit.state.selectedCategoryId,
+                          final selectedCategory = _resolveCategoryValue(
+                            currentValue: _cubit.state.selectedCategory,
                             items: categoryItems,
                           );
 
                           return AppDropdownButtonFormField(
-                            value: selectedCategoryId,
+                            value: selectedCategory,
                             labelText: 'Danh mục',
                             hintText: 'Chọn danh mục',
                             items: categoryItems,
@@ -199,8 +207,12 @@ class _AddProductFormSheetState extends State<AddProductFormSheet> {
                           if (_cubit.formKey.currentState?.validate() != true) {
                             return;
                           }
-                          final success = await _cubit.onSubmit();
-                          if (!mounted || !success) return;
+                          if (widget.product != null) {
+                            await _cubit.updateProduct();
+                          } else {
+                            await _cubit.addProduct();
+                          }
+                          if (!mounted) return;
                           Navigator.of(context).pop(true);
                         },
                         child: const Text('Lưu'),
@@ -325,11 +337,11 @@ class _AddProductFormSheetState extends State<AddProductFormSheet> {
     );
   }
 
-  List<DropdownMenuItem<int?>> _buildDistinctCategoryItems(
+  List<DropdownMenuItem<CategoryEntity?>> _buildDistinctCategoryItems(
     List<CategoryEntity>? categories,
   ) {
     final source = categories ?? const <CategoryEntity>[];
-    final items = <DropdownMenuItem<int?>>[];
+    final items = <DropdownMenuItem<CategoryEntity?>>[];
     final seen = <int?>{};
 
     for (final category in source) {
@@ -337,19 +349,30 @@ class _AddProductFormSheetState extends State<AddProductFormSheet> {
       if (seen.contains(id)) continue;
       seen.add(id);
       items.add(
-        DropdownMenuItem<int?>(value: id, child: Text(category.name ?? '')),
+        DropdownMenuItem<CategoryEntity?>(
+          value: category,
+          child: Text(category.name ?? ''),
+        ),
       );
     }
 
     return items;
   }
 
-  int? _resolveCategoryValue({
-    required int? currentValue,
-    required List<DropdownMenuItem<int?>> items,
+  CategoryEntity? _resolveCategoryValue({
+    required CategoryEntity? currentValue,
+    required List<DropdownMenuItem<CategoryEntity?>> items,
   }) {
     if (currentValue == null) return null;
-    final matched = items.where((item) => item.value == currentValue).length;
-    return matched == 1 ? currentValue : null;
+
+    try {
+      return items
+          .map((e) => e.value)
+          .firstWhere((item) => item?.id == currentValue.id);
+    } catch (e) {
+      return null;
+    }
   }
+
+
 }

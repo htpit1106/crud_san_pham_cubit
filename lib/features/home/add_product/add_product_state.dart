@@ -1,32 +1,39 @@
 import 'package:equatable/equatable.dart';
+import 'package:login_demo/data/model/entities/category_entity.dart';
+import 'package:login_demo/data/model/entities/product_entity.dart';
 import 'package:login_demo/data/model/enums/load_status.dart';
 
 class AddProductState extends Equatable {
   final LoadStatus addProductStatus;
-  final int? selectedCategoryId;
+  final CategoryEntity? selectedCategory;
   final int? selectedStatus;
+  final ProductEntity? productInfo;
   const AddProductState({
     this.addProductStatus = LoadStatus.initial,
-    this.selectedCategoryId,
-    this.selectedStatus = 1,
+    this.selectedCategory,
+    this.selectedStatus,
+    this.productInfo,
   });
   // copywith
   AddProductState copyWith({
     LoadStatus? addProductStatus,
-    int? selectedCategoryId,
+    CategoryEntity? selectedCategory,
     int? selectedStatus,
+    ProductEntity? productInfo,
   }) {
     return AddProductState(
       addProductStatus: addProductStatus ?? this.addProductStatus,
-      selectedCategoryId: selectedCategoryId ?? this.selectedCategoryId,
+      selectedCategory: selectedCategory ?? this.selectedCategory,
       selectedStatus: selectedStatus ?? this.selectedStatus,
+      productInfo: productInfo ?? this.productInfo,
     );
   }
 
   @override
   List<Object?> get props => [
     addProductStatus,
-    selectedCategoryId,
+    selectedCategory,
     selectedStatus,
+    productInfo,
   ];
 }

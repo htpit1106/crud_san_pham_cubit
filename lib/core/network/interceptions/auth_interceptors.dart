@@ -25,7 +25,7 @@ class AuthInterceptors extends Interceptor {
     if (err.response?.statusCode == 401) {
       if (errorKey == KeyConstants.errInvalidAccessToken) {
         await _forceLogout();
-        return handler.reject(err);
+        return handler.next(err);
       }
     }
 

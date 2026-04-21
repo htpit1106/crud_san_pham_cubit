@@ -103,6 +103,7 @@ class HomeCubit extends Cubit<HomeState> {
             errorMessage: failure.message,
           ),
         );
+
         navigator.flushbarNavigator.showError(message: failure.message);
       },
       (response) async {
@@ -243,6 +244,16 @@ class HomeCubit extends Cubit<HomeState> {
       fetchProducts(reset: true);
       await navigator.flushbarNavigator.showSuccess(
         message: 'Thêm sản phẩm thành công',
+      );
+    }
+  }
+
+  Future<void> onPressEditProduct(ProductEntity product) async {
+    final result = await navigator.goToAddProduct(product: product);
+    if (result == true) {
+      fetchProducts(reset: true);
+      await navigator.flushbarNavigator.showSuccess(
+        message: 'Cập nhật sản phẩm thành công',
       );
     }
   }

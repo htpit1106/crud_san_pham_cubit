@@ -319,6 +319,7 @@ class _HomePageChildState extends State<HomePageChild> {
         return ProductCard(
           item: item,
           onDelete: () => _cubit.onDeleteProduct(item.id ?? -1),
+          onEdit: () => _cubit.onPressEditProduct(item),
         );
       },
     );

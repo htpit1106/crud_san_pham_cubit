@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:login_demo/data/model/entities/category_entity.dart';
 import 'package:login_demo/data/model/entities/product_entity.dart';
 import 'package:login_demo/data/model/enums/load_status.dart';
 import 'package:login_demo/data/repositories/product_repository.dart';
@@ -21,8 +22,8 @@ class AddProductCubit extends Cubit<AddProductState> {
   AddProductCubit({required this.producRepository, required this.navigator})
     : super(AddProductState());
 
-  Future<bool> onSubmit() async {
-    if (state.addProductStatus == LoadStatus.loading) return false;
+  Future<void> addProduct() async {
+    if (state.addProductStatus == LoadStatus.loading) return;
 
     final newProduct = ProductEntity(
       name: nameController.text,
@@ -31,7 +32,7 @@ class AddProductCubit extends Cubit<AddProductState> {
       stock: int.tryParse(stockController.text) ?? 0,
       description: descriptionController.text,
       status: state.selectedStatus,
-      categoryId: state.selectedCategoryId,
+      category: state.selectedCategory,
     );
 
     emit(state.copyWith(addProductStatus: LoadStatus.loading));
@@ -40,11 +41,39 @@ class AddProductCubit extends Cubit<AddProductState> {
       (failure) {
         emit(state.copyWith(addProductStatus: LoadStatus.failure));
         navigator.flushbarNavigator.showError(message: failure.message);
-        return false;
       },
       (_) async {
         emit(state.copyWith(addProductStatus: LoadStatus.success));
-        return true;
+      },
+    );
+  }
+
+  Future<void> updateProduct() async {
+    if (state.addProductStatus == LoadStatus.loading) return;
+    if (state.productInfo == null) return;
+
+    final updatedProduct = state.productInfo!.copyWith(
+      name: nameController.text,
+      code: codeController.text,
+      price: double.tryParse(priceController.text) ?? 0,
+      stock: int.tryParse(stockController.text) ?? 0,
+      description: descriptionController.text,
+      status: state.selectedStatus,
+      category: state.selectedCategory,
+    );
+
+    emit(state.copyWith(addProductStatus: LoadStatus.loading));
+    final result = await producRepository.updateProduct(
+      updatedProduct.id!,
+      updatedProduct,
+    );
+    return result.fold(
+      (failure) {
+        emit(state.copyWith(addProductStatus: LoadStatus.failure));
+        navigator.flushbarNavigator.showError(message: failure.message);
+      },
+      (_) async {
+        emit(state.copyWith(addProductStatus: LoadStatus.success));
       },
     );
   }
@@ -53,7 +82,11 @@ class AddProductCubit extends Cubit<AddProductState> {
     emit(state.copyWith(selectedStatus: value));
   }
 
-  void onChangeCategory(int? value) {
-    emit(state.copyWith(selectedCategoryId: value));
+  void onChangeCategory(CategoryEntity? value) {
+    emit(state.copyWith(selectedCategory: value));
+  }
+
+  void changeProductInfo(ProductEntity? product) {
+    emit(state.copyWith(productInfo: product));
   }
 }
