@@ -71,7 +71,7 @@ class _ApiClient implements ApiClient {
     try {
       _value = ArrayResponse<CategoryEntity>.fromJson(
         _result.data!,
-        (json) => CategoryEntity.fromJson(json),
+        (json) => CategoryEntity.fromJson(json as Map<String, dynamic>),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
@@ -171,7 +171,7 @@ class _ApiClient implements ApiClient {
     try {
       _value = ArrayResponse<ProductEntity>.fromJson(
         _result.data!,
-        (json) => ProductEntity.fromJson(json),
+        (json) => ProductEntity.fromJson(json as Map<String, dynamic>),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
@@ -181,12 +181,12 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<void> createProduct(ProductEntity body) async {
+  Future<void> createProduct(Map<String, dynamic> body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(body.toJson());
+    _data.addAll(body);
     final _options = _setStreamType<void>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -220,12 +220,12 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<void> updateProduct(int id, ProductEntity body) async {
+  Future<void> updateProduct(int id, Map<String, dynamic> body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(body.toJson());
+    _data.addAll(body);
     final _options = _setStreamType<void>(
       Options(method: 'PUT', headers: _headers, extra: _extra)
           .compose(

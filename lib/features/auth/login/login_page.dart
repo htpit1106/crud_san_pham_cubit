@@ -121,6 +121,7 @@ class _LoginPageChildState extends State<LoginPageChild> {
                 FocusScope.of(context).requestFocus(_cubit.passwordFocusNode);
               },
             ),
+            12.height,
             AppPasswordTextField(
               focusNode: _cubit.passwordFocusNode,
               controller: _cubit.passwordController,

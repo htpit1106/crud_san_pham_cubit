@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_demo/core/configs/app_configs.dart';
 import 'package:login_demo/core/global/app_cubit.dart';
 import 'package:login_demo/data/database/secure_storage_helper.dart';
-import 'package:login_demo/data/repositories/auth_repository.dart';
+import 'package:login_demo/data/repositories/product_repository.dart';
 import 'package:login_demo/features/intro/splash/splash_navigator.dart';
 import 'package:login_demo/features/intro/splash/splash_state.dart';
 import 'package:login_demo/navigator/app_router.dart';
@@ -10,7 +10,7 @@ import 'package:login_demo/navigator/app_router.dart';
 class SplashCubit extends Cubit<SplashState> {
   DateTime? _showTime;
   final SplashNavigator navigator;
-  final AuthRepository authRepository;
+  final ProductRepository authRepository;
   final AppCubit appCubit;
 
   SplashCubit({
@@ -19,8 +19,8 @@ class SplashCubit extends Cubit<SplashState> {
     required this.appCubit,
   }) : super(SplashState());
 
-  void init() {
-    autoLogin();
+  Future<void> init() async {
+    await autoLogin();
   }
 
   Future<void> autoLogin() async {

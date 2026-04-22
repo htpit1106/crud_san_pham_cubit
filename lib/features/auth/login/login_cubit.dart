@@ -42,7 +42,6 @@ class LoginCubit extends Cubit<LoginState> {
       },
       (response) async {
         emit(state.copyWith(loadLoginStatus: LoadStatus.success));
-        navigator.flushbarNavigator.showSuccess(message: "Login successful");
         await SecureStorageHelper.instance.saveAccessToken(
           response.data?.accessToken,
         );

@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:go_router/go_router.dart';
 import 'package:login_demo/core/constants/key_constants.dart';
 import 'package:login_demo/data/database/secure_storage_helper.dart';
 import 'package:login_demo/navigator/app_router.dart';
@@ -26,7 +25,7 @@ class AuthInterceptors extends Interceptor {
     if (err.response?.statusCode == 401) {
       if (errorKey == KeyConstants.errInvalidAccessToken) {
         await _forceLogout();
-        return handler.reject(err);
+        return handler.next(err);
       }
     }
 

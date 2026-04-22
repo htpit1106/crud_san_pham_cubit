@@ -35,9 +35,9 @@ abstract class ApiClient {
     @Query('category_id') int? categoryId,
   });
   @POST('/products')
-  Future<void> createProduct(@Body() ProductEntity body);
+  Future<void> createProduct(@Body() Map<String, dynamic> body);
   @DELETE('/products/{id}')
   Future<void> deleteProduct(@Path('id') int id);
   @PUT('/products/{id}')
-  Future<void> updateProduct(@Path('id') int id, @Body() ProductEntity body);
+  Future<void> updateProduct(@Path('id') int id, @Body() Map<String, dynamic> body);
 }

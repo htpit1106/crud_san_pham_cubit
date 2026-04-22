@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_demo/core/configs/app_configs.dart';
 import 'package:login_demo/core/network/api_util.dart';
 import 'package:login_demo/data/repositories/auth_repository.dart';
+import 'package:login_demo/data/repositories/product_repository.dart';
 import 'package:login_demo/core/global/app_cubit.dart';
 import 'package:login_demo/core/utils/utils.dart';
 import 'core/theme/app_themes.dart';
@@ -22,6 +23,9 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AppCubit>(create: (context) => AppCubit()),
+        RepositoryProvider<ProductRepository>(
+          create: (context) => ProductRepositoryImpl(apiClient: apiClient),
+        ),
         RepositoryProvider<AuthRepository>(
           create: (context) => AuthRepositoryImpl(apiClient: apiClient),
         ),

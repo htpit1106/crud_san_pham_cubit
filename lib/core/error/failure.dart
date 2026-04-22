@@ -98,6 +98,10 @@ Failure mapMessageKeyFailure(String? messageKey, String? message) {
             message ??
             "Invalid username or password. Please check your credentials and try again.",
       );
+    case KeyConstants.errProductAlreadyExists:
+      return ApiFailure(
+        message: message ?? "A product with the same name already exists.",
+      );
 
     default:
       return UnexpectedFailure(message: "An unexpected error occurred");
